@@ -1,0 +1,5 @@
+{
+  "name": "AgriScan AI",
+  "description": "AI-powered crop health and disease diagnosis platform.",
+  "requestFramePermissions": ["camera"]
+}
