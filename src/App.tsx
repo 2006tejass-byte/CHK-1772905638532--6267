@@ -10,6 +10,11 @@ import { UploadView } from "./components/UploadView";
 import { AnalysisView } from "./components/AnalysisView";
 import { ResultsView } from "./components/ResultsView";
 import { Chatbot } from "./components/Chatbot";
+import { ScrollReveal } from "./components/ScrollReveal";
+import { Threads } from "./components/Threads";
+import { SpotlightCard } from "./components/SpotlightCard";
+import { motion } from "motion/react";
+import { Cpu, HeartPulse, History, WifiOff } from "lucide-react";
 
 export type DiagnosisResult = {
   isPlant: boolean;
@@ -143,23 +148,103 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] font-sans text-slate-900 flex flex-col">
+    <div className="min-h-screen bg-black font-sans text-white flex flex-col relative overflow-hidden">
+      <Threads color="#10b981" />
       <Header />
 
       <main className="flex-1 max-w-5xl w-full mx-auto p-4 md:p-8 flex flex-col items-center justify-center">
         {error && (
-          <div className="mb-6 w-full max-w-2xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
+          <div className="mb-6 w-full max-w-2xl bg-red-900/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-xl">
             {error}
           </div>
         )}
 
         {step === "upload" && (
-          <UploadView onImageSelected={handleImageSelected} />
+          <div className="flex flex-col items-center w-full gap-32">
+            <UploadView onImageSelected={handleImageSelected} />
+            
+            <div className="w-full max-w-5xl px-8 md:px-12 py-32 border-y border-zinc-900/50 bg-zinc-950/20 rounded-[4rem]">
+              <motion.h2 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                className="text-emerald-500 text-center font-black uppercase tracking-[0.4em] text-xs mb-16 opacity-50"
+              >
+                Project Overview
+              </motion.h2>
+              <ScrollReveal 
+                className="text-2xl md:text-5xl font-black leading-[1.4] tracking-tight"
+                text="AgriScan AI is an intelligent agriculture technology project designed to help farmers detect crop diseases quickly and accurately using Artificial Intelligence. By simply capturing or uploading a photo of a plant leaf, the system analyzes the image using advanced machine learning models and identifies potential diseases affecting the crop. The platform provides farmers with instant insights, including the disease name, possible causes, and recommended treatment or preventive measures. This helps farmers take timely action, reduce crop losses, and improve overall agricultural productivity."
+              />
+            </div>
+
+            <div className="w-full max-w-6xl px-4 py-32">
+              <motion.h2 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                className="text-emerald-500 text-center font-black uppercase tracking-[0.4em] text-xs mb-16 opacity-50"
+              >
+                Key Features
+              </motion.h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { 
+                    icon: Cpu, 
+                    title: "AI Precision Diagnosis", 
+                    desc: "State-of-the-art vision models trained on millions of plant images for pinpoint accuracy." 
+                  },
+                  { 
+                    icon: HeartPulse, 
+                    title: "Expert Treatment Plans", 
+                    desc: "Scientific-grade recovery steps and organic alternatives to restore your crop's health." 
+                  },
+                  { 
+                    icon: History, 
+                    title: "Historical Insights", 
+                    desc: "Monitor pattern outbreaks and disease cycles across seasons to stay one step ahead." 
+                  },
+                  { 
+                    icon: WifiOff, 
+                    title: "Edge Capability", 
+                    desc: "Designed for the field. High-speed analysis that works even in satellite-challenging zones." 
+                  }
+                ].map((feature, idx) => (
+                  <SpotlightCard key={idx} className="group">
+                    <div className="flex flex-col gap-4">
+                      <div className="text-emerald-500 bg-emerald-500/10 w-fit p-3 rounded-2xl group-hover:bg-emerald-500/20 transition-colors">
+                        <feature.icon size={28} />
+                      </div>
+                      <h3 className="text-xl font-bold text-white tracking-tight">
+                        {feature.title}
+                      </h3>
+                      <p className="text-zinc-400 text-sm leading-relaxed">
+                        {feature.desc}
+                      </p>
+                    </div>
+                  </SpotlightCard>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
+
         {step === "analyzing" && <AnalysisView image={image} />}
+        
         {step === "results" && diagnosis && (
           <ResultsView diagnosis={diagnosis} onReset={handleReset} />
         )}
+
+        <footer className="w-full py-12 flex flex-col items-center justify-center border-t border-zinc-900/50 mt-auto">
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="text-sm font-medium tracking-widest text-zinc-500 uppercase flex items-center gap-2"
+          >
+            Created with <span className="text-red-500 animate-pulse">❤️</span> by 
+            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent font-black">
+              Flame X Thunder
+            </span>
+          </motion.p>
+        </footer>
       </main>
 
       {/* Floating Chat Button */}
